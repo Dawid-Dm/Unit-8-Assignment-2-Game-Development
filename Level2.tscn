@@ -1,0 +1,56 @@
+[gd_scene load_steps=8 format=3 uid="uid://pocx5no2xyj6"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_2n0fx"]
+[ext_resource type="PackedScene" uid="uid://cxomrhfwejlna" path="res://terrain_controller.tscn" id="2_lblhn"]
+[ext_resource type="Script" path="res://canvas_layer.gd" id="3_c330q"]
+
+[sub_resource type="Sky" id="Sky_dckmj"]
+
+[sub_resource type="Environment" id="Environment_b340k"]
+background_mode = 2
+sky = SubResource("Sky_dckmj")
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0.654902, 0.254902, 0.337255, 1)
+fog_density = 1.0
+fog_depth_begin = 5.0
+fog_depth_end = 50.0
+volumetric_fog_albedo = Color(0, 0, 0, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xy85x"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_ecrt2"]
+
+[node name="World" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_b340k")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.903786, -0.42548, 0.046242, 0.0480812, 0.00642202, 0.998823, -0.425276, 0.904945, 0.0146535, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+script = ExtResource("1_2n0fx")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+shape = SubResource("CapsuleShape3D_xy85x")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+mesh = SubResource("CapsuleMesh_ecrt2")
+
+[node name="Camera3D" type="Camera3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 0.940975, 0.338475, 0, -0.338475, 0.940975, 0, 3.568, 1.5)
+
+[node name="TerrainController" parent="." instance=ExtResource("2_lblhn")]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+script = ExtResource("3_c330q")
+
+[node name="CoinLabel" type="Label" parent="CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Coins collected: 0"
